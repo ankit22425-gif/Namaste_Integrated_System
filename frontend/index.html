@@ -1,0 +1,317 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AYUSH EMR System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="logo">
+            <h2>🏥 AYUSH EMR</h2>
+            <p>Electronic Medical Records</p>
+        </div>
+
+        <nav>
+            <a href="#" class="nav-link active" data-page="dashboard">
+                <span>📊</span> Dashboard
+            </a>
+
+            <a href="#" class="nav-link" data-page="patients">
+                <span>👥</span> Patients
+            </a>
+
+            <a href="#" class="nav-link" data-page="diagnosis">
+                <span>🩺</span> Diagnosis Search
+            </a>
+
+            <a href="#" class="nav-link" data-page="fhir">
+                <span>🔗</span> FHIR Integration
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <!-- Dashboard -->
+        <section id="dashboard" class="page active">
+
+            <header class="page-header">
+                <div>
+                    <h1>Welcome to AYUSH EMR 👋</h1>
+                    <p>Electronic Medical Records Management System</p>
+                </div>
+            </header>
+
+            <!-- Statistics Cards -->
+            <div class="dashboard-cards">
+
+                <div class="card">
+                    <h3>👥 Total Patients</h3>
+                    <h2 id="total-patients">0</h2>
+                </div>
+
+                <div class="card">
+                    <h3>🩺 Total Diagnoses</h3>
+                    <h2 id="total-diagnoses">0</h2>
+                </div>
+
+                <div class="card">
+                    <h3>🟢 System Status</h3>
+                    <h2>Active</h2>
+                </div>
+
+            </div>
+
+            <!-- Statistics and Activity -->
+            <div class="dashboard-extra">
+
+                <div class="panel statistics-panel">
+                    <h2>📈 Patient Statistics</h2>
+                    <p>Overview of registered patients</p>
+
+                    <div class="chart-container">
+                        <canvas id="patient-chart"></canvas>
+                    </div>
+                </div>
+
+                <div class="panel activity-panel">
+                    <h2>🔔 Recent Activity</h2>
+
+                    <div id="recent-activity">
+                        <p class="activity-empty">
+                            No recent activity available.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Recent Patients -->
+            <div class="panel">
+                <h2>👥 Recent Patients</h2>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Patient ID</th>
+                                <th>Name</th>
+                                <th>Age</th>
+                                <th>Gender</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="recent-patients"></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Patients Page -->
+        <section id="patients" class="page">
+
+            <header class="page-header">
+                <div>
+                    <h1>👥 Patient Management</h1>
+                    <p>Register and manage patient records</p>
+                </div>
+            </header>
+
+            <div class="panel">
+                <h2>➕ Register New Patient</h2>
+
+                <form id="patient-form">
+                    <div class="form-grid">
+
+                        <label>
+                            Patient Name
+                            <input type="text" id="patient-name"
+                                placeholder="Enter full name" required>
+                        </label>
+
+                        <label>
+                            Date of Birth
+                            <input type="date" id="patient-dob">
+                        </label>
+
+                        <label>
+                            Age
+                            <input type="number" id="patient-age"
+                                placeholder="Age calculated automatically"
+                                min="0" max="120" readonly>
+                        </label>
+
+                        <label>
+                            Gender
+                            <select id="patient-gender" required>
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                                <option value="unknown">Unknown</option>
+                            </select>
+                        </label>
+
+                        <label>
+                            Phone Number
+                            <input type="tel" id="patient-phone"
+                                placeholder="Enter phone number">
+                        </label>
+
+                    </div>
+
+                    <button type="submit" class="primary-btn">
+                        Register Patient
+                    </button>
+                </form>
+            </div>
+
+            <div class="panel">
+                <h2>📋 All Patients</h2>
+
+                <input type="text" id="patient-filter"
+                    placeholder="Search patients...">
+
+                <div class="table-container">
+                    <table id="patient-table">
+                        <thead>
+                            <tr>
+                                <th>Patient ID</th>
+                                <th>Name</th>
+                                <th>Age</th>
+                                <th>Gender</th>
+                                <th>Phone</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="patient-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Diagnosis Page -->
+        <section id="diagnosis" class="page">
+
+            <header class="page-header">
+                <div>
+                    <h1>🩺 Diagnosis Search</h1>
+                    <p>Search diagnosis terminology</p>
+                </div>
+            </header>
+
+            <div class="panel">
+                <h2>🔍 Search Diagnosis</h2>
+
+                <form id="diagnosis-form">
+                    <div class="form-grid">
+
+                        <label>
+                            Diagnosis Name
+                            <input type="text"
+                                id="diagnosis-query"
+                                placeholder="Enter diagnosis name"
+                                required>
+                        </label>
+
+                        <label>
+                            Coding System
+                            <select id="coding-system">
+                                <option value="NAMASTE">NAMASTE</option>
+                                <option value="ICD-11">ICD-11</option>
+                                <option value="TM2">ICD-11 TM2</option>
+                            </select>
+                        </label>
+
+                    </div>
+
+                    <button type="submit" class="primary-btn">
+                        Search Diagnosis
+                    </button>
+                </form>
+
+                <p id="diagnosis-message"></p>
+
+                <div id="diagnosis-results"></div>
+            </div>
+
+            <div class="panel">
+                <h2>📋 Diagnosis Records</h2>
+
+                <div class="table-container">
+                    <table id="diagnosis-table">
+                        <thead>
+                            <tr>
+                                <th>Patient</th>
+                                <th>Diagnosis</th>
+                                <th>Code</th>
+                                <th>Coding System</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="diagnosis-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- FHIR Page -->
+        <section id="fhir" class="page">
+
+            <header class="page-header">
+                <div>
+                    <h1>🔗 FHIR Integration</h1>
+                    <p>Patient data interoperability and JSON preview</p>
+                </div>
+            </header>
+
+            <div class="panel">
+                <h2>Generate FHIR Patient Resource</h2>
+
+                <label>
+                    Select Patient
+                    <select id="fhir-patient">
+                        <option value="">Select Patient</option>
+                    </select>
+                </label>
+
+                <div class="button-group">
+
+                    <button type="button" id="generate-fhir"
+                        class="primary-btn">
+                        Generate FHIR JSON
+                    </button>
+
+                    <button type="button" id="download-fhir"
+                        class="secondary-btn">
+                        Download JSON
+                    </button>
+
+                </div>
+
+                <h3>📄 FHIR JSON Preview</h3>
+
+                <pre id="fhir-output">Select a patient to generate FHIR JSON.</pre>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
